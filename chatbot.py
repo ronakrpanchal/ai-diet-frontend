@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import json
 
 # Set the API endpoint URL
 API_URL = "http://127.0.0.1:8000/ai"  # Update with your actual API URL
