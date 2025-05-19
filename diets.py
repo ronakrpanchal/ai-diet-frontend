@@ -1,34 +1,36 @@
 import streamlit as st
-from pymongo import MongoClient
+import requests
+
+# Base URL of your FastAPI server
+API_URL = "http://localhost:8000/diet"
 
 def display_diet_plan(user_id):
     """
-    Fetches and displays the diet plan for a given user ID.
-
-    Args:
-        user_id (int): The ID of the user whose diet plan is to be displayed.
+    Fetch diet plan from FastAPI endpoint and display it in Streamlit.
     """
-    # MongoDB setup
-    client = MongoClient(st.secrets['MONGO_URI'])  # Change if hosted elsewhere
-    db = client["health_ai"]
-    collection = db["diets"]
+    with st.spinner("Fetching your diet plan..."):
+        try:
+            response = requests.get(API_URL, params={"id": user_id})
+            response.raise_for_status()
+            data = response.json()
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error fetching data: {e}")
+            return
 
-    # Fetch the diet plan for the user
-    record = collection.find_one({"user_id": user_id, "AI_plan.response_type": "diet_plan"})
-
-    if not record:
-        st.error("No diet plan found.")
+    if data.get("AI_Plan", {}).get("response_type") != "diet_plan":
+        st.warning("No diet plan found.")
         return
 
-    diet_plan = record["AI_plan"]["diet_plan"]
+    diet_plan = data["AI_Plan"]["diet_plan"]
 
-    # --- Display General Diet Info ---
-    st.title("Your AI-Generated Diet Plan")
+    # --- Display General Info ---
+    st.title("🥗 Your AI-Generated Diet Plan")
 
     st.header("🧠 Goal and Preferences")
     st.markdown(f"- **Goal:** {diet_plan['goal']}")
     st.markdown(f"- **Diet Preference:** {diet_plan['dietPreference']}")
 
+    # --- Daily Nutrition ---
     st.header("📊 Daily Nutrition Goals")
     daily = diet_plan["dailyNutrition"]
     st.markdown(f"- **Calories:** {daily['calories']} kcal")
@@ -37,21 +39,22 @@ def display_diet_plan(user_id):
     st.markdown(f"- **Fats:** {daily['fats']} g")
     st.markdown(f"- **Water Intake:** {daily['waterIntake']} L")
 
+    # --- Calorie Distribution ---
     st.header("📈 Calorie Distribution")
     for dist in diet_plan["calorieDistribution"]:
         st.markdown(f"- {dist['category']}: {dist['percentage']}")
 
-    # --- Display Workout Routine ---
+    # --- Workout Routine ---
     st.header("🏋️ Weekly Workout Routine")
     for workout in diet_plan["workoutRoutine"]:
-        st.markdown(f"- **{workout['day']}:** {workout['routine']}")
+        st.markdown(f"- **{workout['day']}**: {workout['routine']}")
 
-    # --- Display Daily Meal Plans ---
+    # --- Weekly Meal Plans ---
     st.header("🍱 Weekly Meal Plans")
     for day_plan in diet_plan["mealPlans"]:
         st.subheader(f"📅 {day_plan['day']}")
-
         st.markdown(f"**Total Calories:** {day_plan['totalCalories']} kcal")
+
         st.markdown("**Macronutrients:**")
         st.markdown(
             f"- Carbs: {day_plan['macronutrients']['carbohydrates']} g\n"
@@ -66,7 +69,12 @@ def display_diet_plan(user_id):
                 st.markdown(f"  - Ingredients: {', '.join(item['ingredients'])}")
         st.markdown("---")
 
-# Example usage
-if __name__ == "__main__":
-    user_id = 1  # Replace with dynamic input if needed
-    display_diet_plan(user_id)
+
+# ---- Streamlit App Layout ----
+# st.set_page_config(page_title="Your Diet Plan", layout="wide")
+
+# st.sidebar.title("🔑 Get Your Diet Plan")
+# user_id = st.sidebar.text_input("Enter your MongoDB user ID (ObjectId string):")
+
+# if user_id:
+#     display_diet_plan(user_id)

@@ -4,10 +4,10 @@ import re
 import bcrypt
 from datetime import datetime
 from db import create_mongodb_structure
-from home import home_page
+from personal_info import personal_info
 from diets import display_diet_plan
 from meals import meal_logs_page
-
+from chatbot import chat_bot
 MONGO_URI = st.secrets["MONGO_URI"]
 
 # Initialize MongoDB client
@@ -155,7 +155,7 @@ def main():
     if "user" not in st.session_state:
         st.session_state.user = None
     if "current_page" not in st.session_state:
-        st.session_state.current_page = "Home"
+        st.session_state.current_page = "chatbot"
     if "auth_tab" not in st.session_state:
         st.session_state.auth_tab = "Sign In"
 
@@ -168,14 +168,17 @@ def main():
             st.write(f"👤 {st.session_state.user['email']}")
             st.markdown("---")
 
-            if st.button("🏠 Home", use_container_width=True):
-                st.session_state.current_page = "Home"
+            if st.button("Chatbot", use_container_width=True):
+                st.session_state.current_page = "chatbot"
                 st.rerun()
             if st.button("Diet plans", use_container_width=True):
                 st.session_state.current_page = "Diets plans"
                 st.rerun()
             if st.button("Meal logs", use_container_width=True):
                 st.session_state.current_page = "Meal logs"
+                st.rerun()
+            if st.button("Personal Info", use_container_width=True):
+                st.session_state.current_page = "info"
                 st.rerun()
             
             st.markdown("---")
@@ -194,12 +197,14 @@ def main():
         if not st.session_state.user.get("profile_completed"):
             submit_personal_info()
         else:
-            if st.session_state.current_page == "Home":
-                home_page(st.session_state.user["id"])
+            if st.session_state.current_page == "info":
+                personal_info(st.session_state.user["id"])
             elif st.session_state.current_page == "Diets plans":
                 display_diet_plan(st.session_state.user["id"])
             elif st.session_state.current_page == "Meal logs":
                 meal_logs_page(st.session_state.user["id"])
+            elif st.session_state.current_page == "chatbot":
+                chat_bot(st.session_state.user["id"])
     else:
         st.title("Welcome to AI Diet Planner")
         tab1, tab2 = st.tabs(["Sign In", "Create Account"])
@@ -213,7 +218,7 @@ def main():
                     success, response = login_user(email, password)
                     if success:
                         st.success("Login successful!")
-                        st.session_state.current_page = "Home"
+                        st.session_state.current_page = "chatbot"
                         st.rerun()
                     else:
                         st.error(response)
