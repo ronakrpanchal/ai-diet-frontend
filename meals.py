@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-
+from bson import ObjectId
 
 API_URL = st.secrets['API_ENDPOINT']  # Use Streamlit secrets for sensitive data
 
@@ -10,7 +10,7 @@ def meal_logs_page(user_id):
     # Fetch meal logs via FastAPI
     try:
         with st.spinner("Loading your meals..."):
-            response = requests.get(API_URL, params={"id": user_id})
+            response = requests.get(API_URL, params={"id": ObjectId(user_id)})
             response.raise_for_status()
             data = response.json()
     except requests.exceptions.HTTPError as e:
