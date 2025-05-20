@@ -8,6 +8,7 @@ from personal_info import personal_info
 from diets import display_diet_plan
 from meals import meal_logs_page
 from chatbot import chat_bot
+
 MONGO_URI = st.secrets["MONGO_URI"]
 
 # Initialize MongoDB client
