@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:8000/user"  # Update this if deployed to a remote server
+
+API_URL = st.secrets['API_ENDPOINT']  # Use Streamlit secrets for sensitive data
 
 def personal_info(user_id):
     st.title("🏠 User Health Profile")

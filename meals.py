@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:8000/meals"
+
+API_URL = st.secrets['API_ENDPOINT']  # Use Streamlit secrets for sensitive data
 
 def meal_logs_page(user_id):
     st.title("🍽️ Meal Logs")

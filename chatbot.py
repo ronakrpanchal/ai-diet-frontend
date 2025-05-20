@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Set the API endpoint URL
-API_URL = "http://127.0.0.1:8000/ai"  # Update with your actual API URL
+API_ENDPOINT = st.secrets['API_ENDPOINT']  # Use Streamlit secrets for sensitive data
 
 def chat_bot(user_id):
     st.title("AI Diet Planner Chatbot")
@@ -35,7 +35,7 @@ def chat_bot(user_id):
         # Make API request
         try:
             response = requests.post(
-                API_URL,
+                API_ENDPOINT,
                 json={"user_id": user_id, "message": prompt}
             )
             

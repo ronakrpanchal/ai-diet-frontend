@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Base URL of your FastAPI server
-API_URL = "http://localhost:8000/diet"
+API_URL = st.secrets['API_ENDPOINT']  # Use Streamlit secrets for sensitive data
 
 def display_diet_plan(user_id):
     """
