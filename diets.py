@@ -11,7 +11,7 @@ def display_diet_plan(user_id):
     """
     with st.spinner("Fetching your diet plan..."):
         try:
-            response = requests.get(API_URL, params={"id": user_id})
+            response = requests.get(f"{API_URL}/diet", params={"id": user_id})
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.RequestException as e:

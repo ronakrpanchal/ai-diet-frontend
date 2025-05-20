@@ -36,7 +36,7 @@ def chat_bot(user_id):
         # Make API request
         try:
             response = requests.post(
-                API_ENDPOINT,
+                f"{API_ENDPOINT}/ai",
                 json={"user_id": user_id, "message": prompt}
             )
             
