@@ -37,7 +37,7 @@ def chat_bot(user_id):
         try:
             response = requests.post(
                 API_ENDPOINT,
-                json={"user_id": ObjectId(user_id), "message": prompt}
+                json={"user_id": user_id, "message": prompt}
             )
             
             if response.status_code == 200:
