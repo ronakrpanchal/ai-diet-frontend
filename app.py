@@ -242,6 +242,3 @@ def main():
                         st.rerun()
                     else:
                         st.error(msg)
-
-if __name__ == "__main__":
-    main()

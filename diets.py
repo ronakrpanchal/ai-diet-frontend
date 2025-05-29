@@ -69,13 +69,3 @@ def display_diet_plan(user_id):
                 st.markdown(f"- **{item['name']}** ({item['calories']} kcal)")
                 st.markdown(f"  - Ingredients: {', '.join(item['ingredients'])}")
         st.markdown("---")
-
-
-# ---- Streamlit App Layout ----
-# st.set_page_config(page_title="Your Diet Plan", layout="wide")
-
-# st.sidebar.title("🔑 Get Your Diet Plan")
-# user_id = st.sidebar.text_input("Enter your MongoDB user ID (ObjectId string):")
-
-# if user_id:
-#     display_diet_plan(user_id)

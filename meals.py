@@ -48,10 +48,3 @@ def meal_logs_page(user_id):
                 st.write(f"  • Carbs: {item.get('carbs', 0)} g")
                 st.write(f"  • Proteins: {item.get('proteins', 0)} g")
                 st.write(f"  • Fats: {item.get('fats', 0)} g")
-
-# ---- App Entry Point ----
-if __name__ == "__main__":
-    st.set_page_config(page_title="Meal Logs", layout="centered")
-    user_id_input = st.sidebar.text_input("Enter your MongoDB User ID (ObjectId):")
-    if user_id_input:
-        meal_logs_page(user_id_input)

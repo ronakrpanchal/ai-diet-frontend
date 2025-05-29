@@ -26,8 +26,3 @@ def personal_info(user_id):
     st.markdown(f"- **Height:** {data.get('height', 'N/A')} cm")
     st.markdown(f"- **Weight:** {data.get('weight', 'N/A')} kg")
     st.markdown(f"- **Body Fat Percentage (BFP):** {data.get('bfp', 'N/A')} %")
-
-# For testing purposes — replace with actual ObjectId from your MongoDB
-if __name__ == "__main__":
-    user_id = "682b1d2989c9596f1f526b59"
-    personal_info(user_id)

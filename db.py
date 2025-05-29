@@ -28,6 +28,3 @@ def create_mongodb_structure():
     except Exception as e:
         print(f"Error creating MongoDB database: {e}")
         return None
-
-if __name__ == "__main__":
-    create_mongodb_structure()
